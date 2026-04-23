@@ -85,8 +85,8 @@ pingall
 
 ---
 
-##📊 Expected Output
-
+📊 Expected Output
+---
 Controller Logs - Terminal 1
 
 ALLOWED: 10.0.0.1 -> 10.0.0.2
@@ -155,7 +155,8 @@ else:
 
 ---
 
-##👨‍💻 Author
+👨‍💻 Author
+---
 Manish Ranga Chinnala
 
 ---
