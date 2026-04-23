@@ -157,6 +157,6 @@ else:
 
 👨‍💻 Author
 ---
-Manish Ranga Chinnala
+Name : Chinnala Manish Ranga  ||  SRN : PES2UG24CS135
 
 ---
