@@ -53,43 +53,61 @@ WHITELIST = ["10.0.0.1", "10.0.0.2"]
 ---
 
 ## 🚀 How to Run the Project
-##1️⃣ Install Dependencies
+1️⃣ Install Dependencies
 sudo apt update
 sudo apt install mininet
 pip install ryu
+
 ---
-##2️⃣ Activate Virtual Environment
+
+2️⃣ Activate Virtual Environment
 source sdn-env/bin/activate
+
 ---
-##3️⃣ Run Ryu Controller
+
+3️⃣ Run Ryu Controller
 ryu-manager access_control.py
+
 ---
-##4️⃣ Start Mininet
+
+4️⃣ Start Mininet
 sudo mn --topo single,3 --mac --controller remote
+
 ---
-##5️⃣ Test Connectivity
+
+5️⃣ Test Connectivity
 pingall
+
 ---
+
 ##📊 Expected Output
----
+
 ##Controller Logs - Terminal 1
----
+
 ALLOWED: 10.0.0.1 -> 10.0.0.2
 BLOCKED: 10.0.0.1 -> 10.0.0.3
 BLOCKED: 10.0.0.2 -> 10.0.0.3
 ##Mininet Output - Terminal 2
 
 Results: 66% dropped (2/6 received)
+
 ---
+
 ##🔍 Code Explanation
 ---
-##🔹 Flow Installation
+🔹 Flow Installation
 *Default rule sends packets to controller
-##🔹 Packet Handling
+
+---
+
+🔹 Packet Handling
 *Extract Ethernet + IP packet
 *Learn MAC addresses
 *Apply access control logic
-##🔹 Access Control Logic
+
+---
+
+🔹 Access Control Logic
 if ip_pkt.src in WHITELIST and ip_pkt.dst in WHITELIST:
     # Allow
 else:
