@@ -35,21 +35,23 @@ The controller:
 ---
 
 ## 🏗️ Network Topology
-h1 ----
+h1 , h2 , h3 --- Hosts
 s1 ---- Controller (Ryu)
-h2 ----/
-h3 ----/
+
 
 ---
 
 ## 🔐 Access Control Policy
-```python
+python
 WHITELIST = ["10.0.0.1", "10.0.0.2"]
 | Source | Destination | Result    |
 | ------ | ----------- | --------- |
 | h1     | h2          | ✅ Allowed |
 | h1     | h3          | ❌ Blocked |
 | h2     | h3          | ❌ Blocked |
+
+---
+
 ## 🚀 How to Run the Project
 ##1️⃣ Install Dependencies
 sudo apt update
