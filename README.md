@@ -85,16 +85,16 @@ pingall
 
 ---
 
-📊 Expected Output
----
+##📊 Expected Output
+
 Controller Logs - Terminal 1
----
+
 ALLOWED: 10.0.0.1 -> 10.0.0.2
 BLOCKED: 10.0.0.1 -> 10.0.0.3
 BLOCKED: 10.0.0.2 -> 10.0.0.3
----
+
 Mininet Output - Terminal 2
----
+
 Results: 66% dropped (2/6 received)
 
 ---
@@ -131,27 +131,27 @@ else:
 
 ⚠️ Known Issues
 ---
-*Bash warning:
-*not a valid identifier
+->Bash warning:
+->not a valid identifier
 ➝ Caused by typo in .bashrc (does not affect execution)
 
 ---
 
 📈 Future Improvements
 ---
-*Dynamic whitelist updates (REST API)
-*GUI dashboard
-*Role-based access control (RBAC)
-*Logging & analytics
+->Dynamic whitelist updates (REST API)
+->GUI dashboard
+->Role-based access control (RBAC)
+->Logging & analytics
 
 ---
 
 📚 Learning Outcomes
 ---
-*Understanding SDN architecture
-*Working with Ryu controller
-*OpenFlow rule management
-*Network security using SDN
+->Understanding SDN architecture
+->Working with Ryu controller
+->OpenFlow rule management
+->Network security using SDN
 
 ---
 
