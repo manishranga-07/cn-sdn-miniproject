@@ -35,7 +35,7 @@ The controller:
 ---
 
 ## 🏗️ Network Topology
-h1 , h2 , h3 --- Hosts
+h1 , h2 , h3 --- Hosts || 
 s1 ---- Controller (Ryu)
 
 
@@ -57,23 +57,32 @@ WHITELIST = ["10.0.0.1", "10.0.0.2"]
 sudo apt update
 sudo apt install mininet
 pip install ryu
+---
 ##2️⃣ Activate Virtual Environment
 source sdn-env/bin/activate
+---
 ##3️⃣ Run Ryu Controller
 ryu-manager access_control.py
+---
 ##4️⃣ Start Mininet
 sudo mn --topo single,3 --mac --controller remote
+---
 ##5️⃣ Test Connectivity
 pingall
+---
 ##📊 Expected Output
+---
 ##Controller Logs - Terminal 1
+---
 ALLOWED: 10.0.0.1 -> 10.0.0.2
 BLOCKED: 10.0.0.1 -> 10.0.0.3
 BLOCKED: 10.0.0.2 -> 10.0.0.3
 ##Mininet Output - Terminal 2
-Results: 66% dropped (2/6 received)
 
+Results: 66% dropped (2/6 received)
+---
 ##🔍 Code Explanation
+---
 ##🔹 Flow Installation
 *Default rule sends packets to controller
 ##🔹 Packet Handling
@@ -85,16 +94,22 @@ if ip_pkt.src in WHITELIST and ip_pkt.dst in WHITELIST:
     # Allow
 else:
     # Drop
+    
+---
 
 ##🧪 Testing & Verification
 ✔ Verified allowed communication (h1 ↔ h2)
 ✔ Verified blocked communication (h1 ↔ h3, h2 ↔ h3)
 ✔ Regression tested for consistent policy enforcement
 
+---
+
 ##⚠️ Known Issues
 *Bash warning:
 *not a valid identifier
 ➝ Caused by typo in .bashrc (does not affect execution)
+
+---
 
 ##📈 Future Improvements
 *Dynamic whitelist updates (REST API)
@@ -102,45 +117,20 @@ else:
 *Role-based access control (RBAC)
 *Logging & analytics
 
+---
+
 ##📚 Learning Outcomes
 *Understanding SDN architecture
 *Working with Ryu controller
 *OpenFlow rule management
 *Network security using SDN
 
+---
+
 ##👨‍💻 Author
 Manish Ranga Chinnala
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---
 
 
 
