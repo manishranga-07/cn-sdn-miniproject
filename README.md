@@ -92,7 +92,8 @@ Controller Logs - Terminal 1
 ALLOWED: 10.0.0.1 -> 10.0.0.2
 BLOCKED: 10.0.0.1 -> 10.0.0.3
 BLOCKED: 10.0.0.2 -> 10.0.0.3
-##Mininet Output - Terminal 2
+---
+Mininet Output - Terminal 2
 ---
 Results: 66% dropped (2/6 received)
 
