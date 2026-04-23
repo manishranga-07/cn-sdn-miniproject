@@ -1,1 +1,91 @@
+from ryu.base import app_manager
+from ryu.controller import ofp_event
+from ryu.controller.handler import MAIN_DISPATCHER, CONFIG_DISPATCHER, set_ev_cls
+from ryu.ofproto import ofproto_v1_3
 
+from ryu.lib.packet import packet
+from ryu.lib.packet import ethernet
+from ryu.lib.packet import ipv4
+
+
+class SimpleSwitch13(app_manager.RyuApp):
+    OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
+
+    WHITELIST = ["10.0.0.1", "10.0.0.2"]
+
+    def __init__(self, *args, **kwargs):
+        super(SimpleSwitch13, self).__init__(*args, **kwargs)
+        self.mac_to_port = {}
+
+    def add_flow(self, datapath, priority, match, actions):
+        parser = datapath.ofproto_parser
+        ofproto = datapath.ofproto
+
+        inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS, actions)]
+
+        mod = parser.OFPFlowMod(
+            datapath=datapath,
+            priority=priority,
+            match=match,
+            instructions=inst
+        )
+        datapath.send_msg(mod)
+
+    @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
+    def switch_features_handler(self, ev):
+        datapath = ev.msg.datapath
+        parser = datapath.ofproto_parser
+        ofproto = datapath.ofproto
+
+        match = parser.OFPMatch()
+        actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER,
+                                          ofproto.OFPCML_NO_BUFFER)]
+        self.add_flow(datapath, 0, match, actions)
+
+    @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
+    def packet_in_handler(self, ev):
+        msg = ev.msg
+        datapath = msg.datapath
+        parser = datapath.ofproto_parser
+        ofproto = datapath.ofproto
+
+        dpid = datapath.id
+        self.mac_to_port.setdefault(dpid, {})
+
+        pkt = packet.Packet(msg.data)
+        eth = pkt.get_protocol(ethernet.ethernet)
+
+        dst = eth.dst
+        src = eth.src
+        in_port = msg.match['in_port']
+
+        self.mac_to_port[dpid][src] = in_port
+
+        if dst in self.mac_to_port[dpid]:
+            out_port = self.mac_to_port[dpid][dst]
+        else:
+            out_port = ofproto.OFPP_FLOOD
+
+        ip_pkt = pkt.get_protocol(ipv4.ipv4)
+
+        # 🔥 ACCESS CONTROL LOGIC
+        if ip_pkt:
+            if ip_pkt.src in self.WHITELIST and ip_pkt.dst in self.WHITELIST:
+                print(f"ALLOWED: {ip_pkt.src} -> {ip_pkt.dst}")
+            else:
+                print(f"BLOCKED: {ip_pkt.src} -> {ip_pkt.dst}")
+                return   # drop packet
+
+        actions = [parser.OFPActionOutput(out_port)]
+
+        match = parser.OFPMatch(in_port=in_port, eth_dst=dst)
+        self.add_flow(datapath, 1, match, actions)
+
+        out = parser.OFPPacketOut(
+            datapath=datapath,
+            buffer_id=ofproto.OFP_NO_BUFFER,
+            in_port=in_port,
+            actions=actions,
+            data=msg.data
+        )
+        datapath.send_msg(out)
